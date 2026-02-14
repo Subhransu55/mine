@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Surprise</title>
+    <style>
+        /* 1. The Setup */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #FF69B4; /* Hot Pink */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* 2. Floating Decorations */
+        .item {
+            position: absolute;
+            bottom: -50px;
+            font-size: 24px;
+            z-index: 1;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* 3. The Envelope Wrapper */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px; /* Buffer from top */
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #d00000; /* Red */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Top Flap */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #a00000;
+            transform-origin: top;
+            transition: transform 0.4s ease;
+            z-index: 3;
+        }
+
+        /* Front Pocket */
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid #f00000;
+            border-right: 150px solid #f00000;
+            border-bottom: 100px solid #d00000;
+            z-index: 4;
+        }
+
+        /* 4. The Letter (The Fix is Here!) */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            height: auto;          /* 1. Allows the letter to grow as long as the text */
+            min-height: 180px;     /* 2. Keeps it looking like a letter even if text is short */
+            overflow-y: auto;
+            left: 15px;
+            width: 270px;
+            height: 180px; /* Initial size */
+            background: white;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: all 0.6s ease-in-out;
+            z-index: 2;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .letter h2 { color: #d00000; margin: 0; font-size: 1.2rem; }
+        .letter p { color: #333; font-size: 1rem; }
+
+        /* OPEN STATE - Adjusted to keep letter LOW */
+        .container.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .container.open .letter {
+            /* This height and translate stay within screen bounds */
+            height: 300px; 
+            width: 500px;
+            left: -100px;
+            transform: translateY(-50px); /* Lower lift value */
+            z-index: 15;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        /* 5. The Button */
+        button {
+            margin-top: 30px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #d00000;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-items"></div>
+
+    <div class="container">
+        <div class="envelope">
+            <div class="flap"></div>
+            <div class="letter">
+                <h2>I LOVE YOU SNEHA❤️</h2>
+                <p>Happy valentines day🌹<p>
+             <p>  i love spending time with you and making memories together. I feel so happy and blessed to have you.Ami jani exams and aro sober jonno ekhon ektu problems hocche but we will overcome them together and joldi dekha kor ami onk kichu plan korechi. amra joldi joldi job peye jai diye we will live together and gurte jabo eksathe, holi in vrindavan okay?  I miss you onk besi everyday miss kori tor kotha bhate bhalo lage mone hoy j ektu santi pelam and toke onk bhalo lage amr. My best friend my love my lil princess i love you onk besi. thankyou for being so special to me. I am blessed to have you puchkii. </p>
+             <p>You are my sunshine
+
+                My only sunshine
+
+                You make me happy
+
+                When skies are gray
+
+                You'll never know, dear
+
+                How much I love you
+
+                Please don't take my sunshine away
+
+                I'll always love you
+
+                And make you happy
+</p>   
+             <p style="font-size: 1.5rem;">❤️</p>
+            </div>
+            <div class="pocket"></div>
+        </div>
+        <button onclick="toggleEnvelope()" id="btn">Open Envelope</button>
+    </div>
+
+    <script>
+        // Toggle Function
+        function toggleEnvelope() {
+            const container = document.querySelector('.container');
+            const btn = document.getElementById('btn');
+            container.classList.toggle('open');
+            btn.innerText = container.classList.contains('open') ? "Close Message" : "Open Envelope";
+        }
+
+        // Background Animation Generator
+        const bg = document.getElementById('bg-items');
+        const symbols = ['❤️', '🌹', '🌸', '🌷'];
+        
+        for (let i = 0; i < 20; i++) {
+            const el = document.createElement('div');
+            el.className = 'item';
+            el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = Math.random() * 100 + "vw";
+            el.style.animationDuration = (Math.random() * 3 + 4) + "s";
+            el.style.animationDelay = Math.random() * 5 + "s";
+            bg.appendChild(el);
+        }
+    </script>
+</body>
+</html>
